@@ -1,8 +1,6 @@
-use crate::dht11::Error::{CheckSum, TimeOut};
-use crate::Error::{CheckSum, TimeOut};
 use rppal::gpio::Level::{High, Low};
 use rppal::gpio::Mode::{Input, Output};
-use rppal::gpio::{Error as GpioError, Gpio, IoPin, Level, Pin};
+use rppal::gpio::{Error as GpioError, IoPin, Level, Pin};
 use std::result::Result;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
@@ -53,7 +51,7 @@ impl DHT11 {
                 humidity: bytes[0],
             })
         } else {
-            Err(CheckSum)
+            Err(Error::CheckSum)
         }
     }
 }
@@ -87,7 +85,7 @@ impl Wait for IoPin {
         let end: Instant = {
             while self.read() == level {
                 if Instant::now() - start > Duration::from_millis(250) {
-                    return Err(TimeOut);
+                    return Err(Error::TimeOut);
                 }
             }
             Instant::now()
