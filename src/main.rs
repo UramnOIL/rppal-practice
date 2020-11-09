@@ -6,11 +6,10 @@ use std::time::Duration;
 
 const GPIO_PIN_DHT11: u8 = 23;
 
-fn main() {
-    let mut dht11 = dht11::DHT11::new(Gpio::new().unwrap().get(GPIO_PIN_DHT11).unwrap());
-
+fn main() -> Result<(), rppal::gpio::Error>{
+    let mut dht11 = dht11::DHT11::new(Gpio::new()?.get(GPIO_PIN_DHT11)?);
     loop {
-        println!("{:?}", dht11.read().unwrap());
-        sleep(Duration::from_secs(1));
+        println!("{:?}", dht11.read());
+        sleep(Duration::from_secs(10));
     }
 }

@@ -17,7 +17,7 @@ impl DHT11 {
     }
 
     pub fn read(&mut self) -> Result<Measure, Error> {
-        let mut pin = &mut self.pin;
+        let pin = &mut self.pin;
 
         //  ハンドシェイク
         pin.set_mode(Output);
@@ -44,8 +44,8 @@ impl DHT11 {
             }
         }
 
-        let sum: u16 = bytes.iter().map(|byte| *byte as u16).sum();
-        if bytes[4] as u16 == sum & 0x00FF {
+        let sum: u16 = bytes.iter().take(4).map(|byte| *byte as u16).sum();
+        if bytes[4] as u16 == sum & 0xFFFF {
             Ok(Measure {
                 temperature: bytes[2],
                 humidity: bytes[0],
